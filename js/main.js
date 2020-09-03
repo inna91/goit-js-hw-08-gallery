@@ -8,7 +8,7 @@ const refs = {
   closeModalBtn: document.querySelector('button[data-action="close-lightbox"]'),
   overlay: document.querySelector(".lightbox__content"),
 };
-let index = 0;
+// let index = 0;
 createGallery();
 
 refs.gallaryList.addEventListener("click", onGalleryItemClick);
@@ -16,7 +16,7 @@ refs.closeModalBtn.addEventListener("click", onCloseModal);
 refs.overlay.addEventListener("click", onOverlayClick);
 
 function createGallery() {
-  const makeTree = images.map((image) => {
+  const makeTree = images.map((image, index) => {
     const li = document.createElement("li");
     const a = document.createElement("a");
     a.classList.add("gallery__link");
@@ -31,7 +31,7 @@ function createGallery() {
 
     a.appendChild(img);
     li.appendChild(a);
-    index += 1;
+    // index += 1;
 
     return li;
   });
@@ -85,20 +85,40 @@ function onOverlayClick(event) {
   }
 }
 
+// function onNextClick() {
+//   if (index > images.length - 2) {
+//     index = -1;
+//   }
+//   ++index;
+//   refs.largeImg.src = images[index].original;
+// }
+
+// function onPrevClick() {
+//   if (index < 1) {
+//     index = images.length;
+//   }
+//   --index;
+//   refs.largeImg.src = images[index].original;
+// }
+
 function onNextClick() {
-  if (index > images.length - 2) {
-    index = -1;
+  const image = document.querySelector(".gallery__image");
+  let index = +image.getAttribute("data-index");
+  if (index < images.length - 1) {
+    index += 1;
+    refs.largeImg.src = images[index].original;
+    console.log(index);
   }
-  ++index;
-  refs.largeImg.src = images[index].original;
 }
 
 function onPrevClick() {
-  if (index < 1) {
-    index = images.length;
+  const image = document.querySelector(".gallery__image");
+  let index = +image.getAttribute("data-index");
+  if (index > 0) {
+    index -= 1;
+    refs.largeImg.src = images[index].original;
+    console.log(index);
   }
-  --index;
-  refs.largeImg.src = images[index].original;
 }
 
 function onPressHandler(event) {
