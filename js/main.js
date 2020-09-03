@@ -8,19 +8,15 @@ const refs = {
   closeModalBtn: document.querySelector('button[data-action="close-lightbox"]'),
   overlay: document.querySelector(".lightbox__content"),
 };
-
+let index = 0;
 createGallery();
 
 refs.gallaryList.addEventListener("click", onGalleryItemClick);
 refs.closeModalBtn.addEventListener("click", onCloseModal);
 refs.overlay.addEventListener("click", onOverlayClick);
-refs.modal.addEventListener("keydown", onNextClick);
-refs.modal.addEventListener("keydown", onPrevClick);
 
 function createGallery() {
-  let index = 0;
   const makeTree = images.map((image) => {
-    index += 1;
     const li = document.createElement("li");
     const a = document.createElement("a");
     a.classList.add("gallery__link");
@@ -35,9 +31,11 @@ function createGallery() {
 
     a.appendChild(img);
     li.appendChild(a);
+    index += 1;
 
     return li;
   });
+
   refs.gallaryList.append(...makeTree);
 }
 
@@ -67,12 +65,12 @@ function setLargeImageAlt(alt) {
 }
 
 function openModal() {
-  window.addEventListener("keydown", onPressEscape);
+  window.addEventListener("keydown", onPressHandler);
   refs.modal.classList.add("is-open");
 }
 
 function onCloseModal() {
-  window.removeEventListener("keydown", onPressEscape);
+  window.removeEventListener("keydown", onPressHandler);
   refs.modal.classList.remove("is-open");
   deleteLargeImageSrc();
 }
@@ -87,12 +85,30 @@ function onOverlayClick(event) {
   }
 }
 
-function onPressEscape(event) {
+function onNextClick() {
+  if (index > images.length - 2) {
+    index = -1;
+  }
+  ++index;
+  refs.largeImg.src = images[index].original;
+}
+
+function onPrevClick() {
+  if (index < 1) {
+    index = images.length;
+  }
+  --index;
+  refs.largeImg.src = images[index].original;
+}
+
+function onPressHandler(event) {
   if (event.code === "Escape") {
     onCloseModal();
   }
+  if (event.code === "ArrowLeft") {
+    onPrevClick();
+  }
+  if (event.code === "ArrowRight") {
+    onNextClick();
+  }
 }
-
-function onNextClick() {}
-
-function onPrevClick() {}
