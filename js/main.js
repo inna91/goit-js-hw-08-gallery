@@ -8,7 +8,7 @@ const refs = {
   closeModalBtn: document.querySelector('button[data-action="close-lightbox"]'),
   overlay: document.querySelector(".lightbox__content"),
 };
-// let index = 0;
+
 createGallery();
 
 refs.gallaryList.addEventListener("click", onGalleryItemClick);
@@ -31,7 +31,6 @@ function createGallery() {
 
     a.appendChild(img);
     li.appendChild(a);
-    // index += 1;
 
     return li;
   });
@@ -60,6 +59,10 @@ function setLargeImageSrc(url) {
   refs.largeImg.src = url;
 }
 
+function getLargeImageSrc() {
+  return refs.largeImg.getAttribute("src");
+}
+
 function setLargeImageAlt(alt) {
   refs.largeImg.alt = alt;
 }
@@ -85,40 +88,24 @@ function onOverlayClick(event) {
   }
 }
 
-// function onNextClick() {
-//   if (index > images.length - 2) {
-//     index = -1;
-//   }
-//   ++index;
-//   refs.largeImg.src = images[index].original;
-// }
-
-// function onPrevClick() {
-//   if (index < 1) {
-//     index = images.length;
-//   }
-//   --index;
-//   refs.largeImg.src = images[index].original;
-// }
-
-function onNextClick() {
-  const image = document.querySelector(".gallery__image");
-  let index = +image.getAttribute("data-index");
-  if (index < images.length - 1) {
-    index += 1;
-    refs.largeImg.src = images[index].original;
-    console.log(index);
+function onPrevClick() {
+  const curSrc = getLargeImageSrc();
+  let current = images.findIndex((el) => el.original === curSrc);
+  if (current === 0) {
+    current = images.length;
   }
+  const newIndex = images.find((el, i) => i === current - 1);
+  setLargeImageSrc(newIndex.original);
 }
 
-function onPrevClick() {
-  const image = document.querySelector(".gallery__image");
-  let index = +image.getAttribute("data-index");
-  if (index > 0) {
-    index -= 1;
-    refs.largeImg.src = images[index].original;
-    console.log(index);
+function onNextClick() {
+  const curSrc = getLargeImageSrc();
+  let current = images.findIndex((el) => el.original === curSrc);
+  if (current === images.length - 1) {
+    current = -1;
   }
+  const newIndex = images.find((el, i) => i === current + 1);
+  setLargeImageSrc(newIndex.original);
 }
 
 function onPressHandler(event) {
