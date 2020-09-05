@@ -16,7 +16,7 @@ refs.closeModalBtn.addEventListener("click", onCloseModal);
 refs.overlay.addEventListener("click", onOverlayClick);
 
 function createGallery() {
-  const makeTree = images.map((image, index) => {
+  const makeTree = images.map((image) => {
     const li = document.createElement("li");
     const a = document.createElement("a");
     a.classList.add("gallery__link");
@@ -27,7 +27,6 @@ function createGallery() {
     img.setAttribute("src", image.preview);
     img.setAttribute("data-source", image.original);
     img.setAttribute("alt", image.description);
-    img.setAttribute("data-index", index);
 
     a.appendChild(img);
     li.appendChild(a);
